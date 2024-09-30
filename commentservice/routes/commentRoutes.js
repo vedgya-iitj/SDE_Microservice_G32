@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../models/Comment');
 
-// Create a new Comment
+/**
+ * Handles the Post request for new comments
+ *
+ * @param {*} req - Header passed by View.
+ * @returns {res} - resp status code.
+ */
 router.post('/', async (req, res) => {
     const newComment = new Comment(req.body);
     try {
@@ -13,7 +18,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Get Comments by Post ID
+
+
 router.get('/:postId', async (req, res) => {
     try {
         const comments = await Comment.find({ postId: req.params.postId });
@@ -23,4 +29,10 @@ router.get('/:postId', async (req, res) => {
     }
 });
 
+/**
+ * Checks if the given value is a non-null object.
+ *
+ * @param {*} value - The value to check.
+ * @returns {boolean} - True if the value is a non-null object, otherwise false.
+ */
 module.exports = router;

@@ -96,7 +96,6 @@
         document.getElementById('landingPage').style.display = 'none';
         
 
-        // Show the selected section
         if (section === 'register') {
             document.getElementById('register').style.display = 'block';
         } else if (section === 'login') {
@@ -115,6 +114,14 @@
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
+        /**
+         * The response object obtained after making a POST request to the user registration endpoint.
+         *
+         * The request sends user registration details (username, email, and password) to the specified API URL.
+         *
+         * @type {Promise<Response>}
+         * @see fetch
+         */
         const response = await fetch(`${apiUrlUsers}/register`, {
             method: 'POST',
             headers: {
@@ -129,12 +136,21 @@
         showSection('login'); // Navigate to login section
     });
 
-    // Login User
+
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
 
+        /**
+         * The `response` variable holds the result of making a POST request to the user login endpoint.
+         *
+         * This request sends user credentials (username and password) to the server to authenticate the user.
+         *
+         * The server response, stored in `response`, is handled asynchronously.
+         *
+         * @type {Promise<Response>}
+         */
         const response = await fetch(`${apiUrlUsers}/login`, {
             method: 'POST',
             headers: {
@@ -143,6 +159,17 @@
             body: JSON.stringify({ username, password })
         });
 
+        /**
+         * Represents the data extracted from the response of an HTTP request.
+         * The `data` variable holds the JSON-parsed content of the response.
+         *
+         * @type {Object} data - The parsed JSON object.
+         * @throws {SyntaxError} If the response is not valid JSON.
+         *
+         * @async
+         * @function
+         * @returns {Promise<Object>} A promise that resolves to a JSON object.
+         */
         const data = await response.json();
         if (data.message === "Login successful") {
             alert("Login successful!");
@@ -155,11 +182,23 @@
         }
     });
 
-    // Create Post
+
     document.getElementById('postForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const content = document.getElementById('postContent').value;
 
+        /**
+         * Represents the HTTP response received from making a POST request to the specified API URL for posts.
+         *
+         * The fetch function sends a POST request to the given `apiUrlPosts` endpoint with the following options:
+         * - method: 'POST'
+         * - headers: Sets the 'Content-Type' to 'application/json'
+         * - body: A JSON stringified object containing the user's ID and post content
+         *
+         * The response contains information about the status and the result of the HTTP request.
+         *
+         * @type {Response}
+         */
         const response = await fetch(apiUrlPosts, {
             method: 'POST',
             headers: {
@@ -175,6 +214,13 @@
     });
 
     // Fetch all posts
+    /**
+     * Fetches posts from the specified API, processes the response to extract post data,
+     * and dynamically updates the inner HTML of the 'postsContainer' element to display the posts.
+     *
+     * @return {Promise<void>} A promise that resolves when the posts have been successfully
+     * fetched and displayed in the 'postsContainer' element.
+     */
     async function fetchPosts() {
         const response = await fetch(apiUrlPosts);
         const posts = await response.json();
@@ -197,6 +243,12 @@
     }
 
     // Show comments for a post
+    /**
+     * Fetches and displays comments for a given post. If the comments are already displayed, it hides them.
+     *
+     * @param {string|number} postId - The ID of the post for which to show comments.
+     * @return {Promise<void>} - A promise that resolves when comments are fetched and displayed or hidden.
+     */
     async function showComments(postId) {
         const commentsContainer = document.getElementById(`comments-${postId}`);
         if (commentsContainer.style.display === 'block') {
@@ -221,7 +273,12 @@
         commentsContainer.style.display = 'block'; // Show comments
     }
 
-    // Function to add a comment to a post
+    /**
+     * Adds a comment to a specified post.
+     *
+     * @param {string} postId - The ID of the post to which the comment is to be added.
+     * @return {Promise<void>} - A promise that resolves once the comment is added and the posts are refreshed.
+     */
     async function addComment(postId) {
         const commentText = prompt("Enter your comment:"); // Prompt for comment input
         if (!commentText) return; // Exit if no comment is provided

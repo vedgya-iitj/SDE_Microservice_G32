@@ -10,16 +10,24 @@ const PORT = process.env.PORT || 5002;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Connect to MongoDB
+/**
+Connect to mongo DB, URI passed in the env file or docker compose.
+ */
 mongoose.connect(process.env.MONGODB_URI_POSTS, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("Post MongoDB connected"))
     .catch(err => console.log(err));
 
-// Import Routes
+
+/**
+ * The postRoutes variable imports the routes for handling post-related operations
+ * from the './routes/postRoutes' file. This module typically handles the creation,
+ * retrieval, updating, and deletion of posts.
+ *
+ * @module postRoutes
+ */
 const postRoutes = require('./routes/postRoutes');
 app.use('/api/posts', postRoutes);
 
-// Basic route
 app.get('/', (req, res) => {
     res.send('Post Service API');
 });
